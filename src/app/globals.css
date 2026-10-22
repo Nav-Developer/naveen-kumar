@@ -1,19 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  /* existing vars stay... */
-  --wine-950: #1f070b;
-  --wine-900: #2e0d12;
-  --wine-800: #4a1820;
-  --wine-700: #6a1d22;
-  --wine-600: #7f2421; /* navbar maroon */
-  --gold-400: #e9c46a;
-  --copper: #c98b6b;
-  --cream-200: #f4e8d3;
+  /* ---- Void + Violet palette ---- */
+  --void-950: #05030a;
+  --void-900: #0b0616;
+  --void-800: #150a2e;
+  --void-700: #241048;
+  --violet-glow: #8b5cf6;
+  --violet-soft: #a78bfa;
+  --violet-pale: #c4b5fd;
+  --blue-glow: #60a5fa;
+  --text-main: #ede9fe;
+
+  /* legacy names so old components keep working */
+  --wine-950: var(--void-950);
+  --wine-900: var(--void-900);
+  --wine-800: var(--void-800);
+  --wine-700: var(--void-700);
+  --wine-600: var(--void-800);
+  --gold-400: var(--violet-soft);
+  --copper: var(--blue-glow);
+  --cream-200: var(--text-main);
+
+  --cream: var(--void-950);
+  --ink: var(--text-main);
 }
 
 @theme inline {
-  /* existing... */
+  --color-void-950: var(--void-950);
+  --color-void-900: var(--void-900);
+  --color-void-800: var(--void-800);
+  --color-glow: var(--violet-glow);
+  --color-soft: var(--violet-soft);
+  --color-pale: var(--violet-pale);
+  --color-blue-glow: var(--blue-glow);
+
   --color-wine-950: var(--wine-950);
   --color-wine-800: var(--wine-800);
   --color-wine-600: var(--wine-600);
@@ -22,31 +43,76 @@
   --color-cream-200: var(--cream-200);
 }
 
-/* html {
-  scroll-behavior: smooth;
-} */
-
 body {
-  background-color: var(--cream);
-  background-image: radial-gradient(
-    rgba(217, 56, 50, 0.07) 1px,
-    transparent 1px
-  );
-  background-size: 22px 22px;
+  background-color: var(--void-950);
   color: var(--ink);
   font-family: var(--font-montserrat), sans-serif;
+}
+
+/* ---------- utilities used by Nav + Hero ---------- */
+.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.glass-strong {
+  background: rgba(14, 10, 26, 0.72);
+  border: 1px solid rgba(167, 139, 250, 0.22);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  box-shadow:
+    0 10px 40px -10px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #c4b5fd, #8b5cf6 45%, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.gradient-text {
+  background: linear-gradient(90deg, #c4b5fd, #8b5cf6 45%, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glow-electric {
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.55);
+}
+
+.caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.85em;
+  margin-left: 0.12em;
+  vertical-align: -0.05em;
+  background: #a78bfa;
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
 }
 
 .field {
   flex: 1;
   min-width: 0;
   border-radius: 9999px;
-  background: var(--cream);
+  background: var(--void-800);
   padding: 0.875rem 1.25rem;
   font-size: 0.875rem;
   color: var(--ink);
   outline: none;
 }
 .field:focus {
-  box-shadow: 0 0 0 2px var(--gold-400);
+  box-shadow: 0 0 0 2px var(--violet-glow);
 }

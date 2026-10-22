@@ -14,7 +14,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Broffles",
+  title: "Naveen Kumar",
   description: "Where every dish is a performance.",
 };
 

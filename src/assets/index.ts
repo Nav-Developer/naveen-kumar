@@ -3,6 +3,7 @@ import waffle from "./Images/waffle.png";
 import waffle_out from "./Images/waffle_out.png";
 import founders from "./Images/founders.png";
 import first_store from "./Images/firstStore.png";
+import me from "./Images/me.png";
 
 const assets = {
   images: {
@@ -11,6 +12,7 @@ const assets = {
     waffle_out: waffle_out,
     founders: founders,
     first_store: first_store,
+    me: me,
   },
 };
 

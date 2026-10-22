@@ -1,382 +1,559 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
-  AnimatePresence,
   motion,
+  useMotionTemplate,
   useMotionValue,
   useSpring,
   useTransform,
-  MotionValue,
 } from "framer-motion";
 import assets from "@/assets";
 
-const WORDS = ["crunch", "drizzle", "party", "stack"];
-
-const BITS = [
-  { x: "8%", y: "18%", size: 100, rot: -15, depth: 40, delay: 0 },
-  { x: "42%", y: "8%", size: 120, rot: 20, depth: 70, delay: 0.6 },
-  { x: "88%", y: "22%", size: 110, rot: 12, depth: 30, delay: 0.3 },
-  { x: "43%", y: "50%", size: 110, rot: 12, depth: 30, delay: 0.3 },
-  { x: "6%", y: "70%", size: 90, rot: 25, depth: 60, delay: 0.9 },
-  { x: "50%", y: "78%", size: 130, rot: -30, depth: 80, delay: 0.2 },
-  { x: "92%", y: "72%", size: 80, rot: -10, depth: 50, delay: 0.5 },
+/* ---------------- EDIT THESE ---------------- */
+const FULL_NAME = "Naveen Kumar";
+const ROLE = "Full Stack Engineer";
+const VERSION = "v2026.10";
+const PHRASES = [
+  "digital products.",
+  "fast interfaces.",
+  "smooth motion.",
+  "scalable apps.",
+];
+const TAGLINE =
+  "Building digital products. Creating content. Living performance.";
+const STATS = [
+  { k: "2+", v: "Years building" },
+  { k: "Full", v: "Stack engineer" },
+  { k: "Open", v: "To opportunities" },
+];
+const STACK = [
+  "React",
+  "TypeScript",
+  "Next.js",
+  "NestJS",
+  "MongoDB",
+  "Node.js",
+  "Tailwind",
+  "GSAP",
+  "Framer Motion",
+  "Git",
 ];
 
-// function WaffleBit({ size, rot }: { size: number; rot: number }) {
-//   return (
-//     <Image
-//       src={assets.images.waffle}
-//       width={size}
-//       height={size}
-//       alt=""
-//       style={{
-//         transform: `rotate(${rot}deg)`,
-//         objectFit: "contain",
-//         mixBlendMode: "multiply",
-//       }}
-//     />
-//   );
-// }
+const PHOTO = assets.images.me;
 
-// function WaffleOutBit({ size, rot }: { size: number; rot: number }) {
-//   return (
-//     <Image
-//       src={assets.images.waffle_out}
-//       width={size}
-//       height={size}
-//       alt=""
-//       style={{
-//         transform: `rotate(${rot}deg)`,
-//         objectFit: "contain",
-//         mixBlendMode: "multiply",
-//       }}
-//     />
-//   );
-// }
-function WaffleImg({
-  src,
-  size,
-}: {
-  src: typeof assets.images.waffle;
-  size: number;
-}) {
-  return (
-    <Image
-      src={src}
-      width={size}
-      height={size}
-      alt=""
-      priority
-      draggable={false}
-      style={{ width: "100%", height: "100%", objectFit: "contain" }}
-    />
-  );
+// Set to true only if your photo does NOT already have "BUILD. LEARN. EVOLVE" baked in.
+const SHOW_POSTER_TEXT = false;
+/* -------------------------------------------- */
+
+function seeded(n: number) {
+  const x = Math.sin(n * 9999) * 10000;
+  return x - Math.floor(x);
 }
 
-function FloatingBit({
-  b,
-  mx,
-  my,
-}: {
-  b: (typeof BITS)[number];
-  mx: MotionValue<number>;
-  my: MotionValue<number>;
-}) {
-  const x = useTransform(mx, [-0.5, 0.5], [-b.depth, b.depth]);
-  const y = useTransform(my, [-0.5, 0.5], [-b.depth, b.depth]);
-  const [clicked, setClicked] = useState(false);
+const MOTES = Array.from({ length: 26 }, (_, k) => ({
+  left: `${seeded(k + 1) * 100}%`,
+  top: `${35 + seeded(k + 50) * 65}%`,
+  size: 2 + Math.round(seeded(k + 90) * 2),
+  dur: 6 + seeded(k + 130) * 8,
+  delay: seeded(k + 170) * 6,
+}));
 
-  const fade = { duration: 0.6, ease: "easeInOut" as const };
+/* ---------- text scramble hook ---------- */
+const GLYPHS = "!<>-_\\/[]{}=+*^?#01";
 
-  return (
-    <motion.div
-      style={{
-        position: "absolute",
-        left: b.x,
-        top: b.y,
-        x,
-        y,
-        cursor: "pointer",
-        zIndex: 20,
-      }}
-      onClick={() => setClicked((p) => !p)}
-    >
-      <motion.div
-        animate={{ y: [0, -18, 0], rotate: [0, 8, -8, 0] }}
-        transition={{
-          duration: 5 + b.delay * 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: b.delay,
-        }}
-      >
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.92 }}
-          style={{
-            position: "relative",
-            width: b.size,
-            height: b.size,
-            rotate: b.rot,
-            perspective: 600,
-          }}
-        >
-          {/* <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={clicked ? "out" : "in"}
-              style={{ position: "absolute", inset: 0 }}
-              initial={{ rotateY: 90, opacity: 0 }}
-              animate={{ rotateY: 0, opacity: 1 }}
-              exit={{ rotateY: -90, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-            >
-              <WaffleImg
-                src={clicked ? assets.images.waffle_out : assets.images.waffle}
-                size={b.size}
-              />
-            </motion.div>
-          </AnimatePresence> */}
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={clicked ? "out" : "in"}
-              style={{ position: "absolute", inset: 0 }}
-              initial={{ scale: 0.4, opacity: 0, y: 10, filter: "blur(6px)" }}
-              animate={{
-                scale: 1,
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                transition: { type: "spring", stiffness: 260, damping: 16 },
-              }}
-              exit={{
-                scale: 0.4,
-                opacity: 0,
-                y: -10,
-                filter: "blur(6px)",
-                transition: { duration: 0.18, ease: "easeIn" },
-              }}
-            >
-              <WaffleImg
-                src={clicked ? assets.images.waffle_out : assets.images.waffle}
-                size={b.size}
-              />
-            </motion.div>
-          </AnimatePresence>
-        </motion.div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function Sparkle({
-  top,
-  left,
-  delay,
-}: {
-  top: string;
-  left: string;
-  delay: number;
-}) {
-  return (
-    <motion.svg
-      width="26"
-      height="26"
-      viewBox="0 0 24 24"
-      style={{ position: "absolute", top, left }}
-      animate={{ scale: [0, 1, 0], rotate: [0, 90, 180] }}
-      transition={{ duration: 2.4, repeat: Infinity, delay }}
-    >
-      <path
-        d="M12 0 L14 10 L24 12 L14 14 L12 24 L10 14 L0 12 L10 10 Z"
-        fill="#f2c14e"
-      />
-    </motion.svg>
-  );
-}
-
-export default function HeroMotion() {
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const smx = useSpring(mx, { stiffness: 60, damping: 15 });
-  const smy = useSpring(my, { stiffness: 60, damping: 15 });
-  const tiltX = useTransform(smy, [-0.5, 0.5], [10, -10]);
-  const tiltY = useTransform(smx, [-0.5, 0.5], [-10, 10]);
-  const [i, setI] = useState(0);
+function useScramble(words: string[], hold = 2600) {
+  const [text, setText] = useState(words[0]);
 
   useEffect(() => {
-    const t = setInterval(() => setI((p) => (p + 1) % WORDS.length), 2200);
-    return () => clearInterval(t);
-  }, []);
+    let i = 0;
+    let raf = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    let alive = true;
+
+    const run = (from: string, to: string, done: () => void) => {
+      const len = Math.max(from.length, to.length);
+      const queue = Array.from({ length: len }, (_, k) => {
+        const start = Math.floor(Math.random() * 14);
+        return {
+          from: from[k] ?? "",
+          to: to[k] ?? "",
+          start,
+          end: start + 10 + Math.floor(Math.random() * 14),
+          ch: "",
+        };
+      });
+      let frame = 0;
+      const tick = () => {
+        if (!alive) return;
+        let out = "";
+        let complete = 0;
+        for (const q of queue) {
+          if (frame >= q.end) {
+            complete++;
+            out += q.to;
+          } else if (frame >= q.start) {
+            if (!q.ch || Math.random() < 0.28)
+              q.ch = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+            out += q.ch;
+          } else out += q.from;
+        }
+        setText(out);
+        if (complete === queue.length) done();
+        else {
+          frame++;
+          raf = requestAnimationFrame(tick);
+        }
+      };
+      tick();
+    };
+
+    const next = () => {
+      timer = setTimeout(() => {
+        const from = words[i];
+        i = (i + 1) % words.length;
+        run(from, words[i], next);
+      }, hold);
+    };
+    next();
+
+    return () => {
+      alive = false;
+      clearTimeout(timer);
+      cancelAnimationFrame(raf);
+    };
+  }, [words, hold]);
+
+  return text;
+}
+
+const spotlightMask = (r: number) =>
+  `radial-gradient(circle ${r}px at var(--mx) var(--my), #000 0%, transparent 100%)`;
+
+export default function HeroMotion() {
+  const ref = useRef<HTMLElement>(null);
+  const phrase = useScramble(PHRASES);
+
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const smx = useSpring(mx, { stiffness: 50, damping: 16 });
+  const smy = useSpring(my, { stiffness: 50, damping: 16 });
+
+  const cardX = useTransform(smx, [-0.5, 0.5], [-10, 10]);
+  const cardY = useTransform(smy, [-0.5, 0.5], [-6, 6]);
+  const photoX = useTransform(smx, [-0.5, 0.5], [-10, 10]);
+  const photoY = useTransform(smy, [-0.5, 0.5], [-6, 6]);
+
+  // 3D tilt: the card leans toward the cursor
+  const tiltY = useTransform(smx, [-0.5, 0.5], [-7, 7]);
+  const tiltX = useTransform(smy, [-0.5, 0.5], [5, -5]);
+
+  // light sheen that slides across the portrait with the cursor
+  const sheenX = useTransform(smx, [-0.5, 0.5], [20, 85]);
+  const sheenY = useTransform(smy, [-0.5, 0.5], [15, 70]);
+  const sheen = useMotionTemplate`radial-gradient(circle at ${sheenX}% ${sheenY}%, rgba(216,204,255,0.38), transparent 48%)`;
+
+  const onMove = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    ref.current?.style.setProperty("--mx", `${x}px`);
+    ref.current?.style.setProperty("--my", `${y}px`);
+    mx.set(x / r.width - 0.5);
+    my.set(y / r.height - 0.5);
+  };
 
   return (
-    <>
-      <section
-        onMouseMove={(e) => {
-          mx.set(e.clientX / window.innerWidth - 0.5);
-          my.set(e.clientY / window.innerHeight - 0.5);
-        }}
-        className="relative min-h-screen overflow-hidden"
+    <section
+      ref={ref}
+      onMouseMove={onMove}
+      className="relative min-h-screen overflow-hidden"
+      style={
+        {
+          "--mx": "72%",
+          "--my": "38%",
+          background:
+            "radial-gradient(ellipse at 78% 35%, #1a0b3d 0%, #07040f 55%, #05030a 100%)",
+        } as React.CSSProperties
+      }
+    >
+      {/* cursor glow */}
+      <div
+        className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 70% 45%, #7a2230 0%, #3a0d12 55%, #1a0508 100%)",
+            "radial-gradient(520px circle at var(--mx) var(--my), rgba(139,92,246,0.2), transparent 65%)",
         }}
-      >
-        {BITS.map((b, idx) => (
-          <FloatingBit key={idx} b={b} mx={smx} my={smy} />
-        ))}
-        <Sparkle top="20%" left="55%" delay={0} />
-        <Sparkle top="68%" left="46%" delay={0.8} />
-        <Sparkle top="30%" left="92%" delay={1.5} />
+      />
 
-        <div className="relative z-10 mx-auto grid min-h-screen max-w-7xl items-center gap-10 px-6 pb-40 pt-28 md:grid-cols-2">
-          {/* TEXT */}
-          <div>
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-block rounded-full bg-[#f2c14e] px-4 py-1 text-xs font-black uppercase tracking-widest text-[#3a0d12]"
+      {/* grid appears only under the cursor */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(167,139,250,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.3) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage: spotlightMask(300),
+          WebkitMaskImage: spotlightMask(300),
+        }}
+      />
+
+      {/* rising light dust */}
+      {MOTES.map((m, k) => (
+        <motion.span
+          key={k}
+          className="pointer-events-none absolute rounded-full bg-pale"
+          style={{ left: m.left, top: m.top, width: m.size, height: m.size }}
+          animate={{ y: [0, -170], opacity: [0, 0.9, 0] }}
+          transition={{
+            duration: m.dur,
+            repeat: Infinity,
+            delay: m.delay,
+            ease: "easeOut",
+          }}
+        />
+      ))}
+
+      {/* ===== PORTRAIT CARD ===== */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-24 mx-auto w-[min(78vw,340px)] opacity-40 md:inset-x-auto md:bottom-auto md:right-[6%] md:top-1/2 md:mx-0 md:w-[min(32vw,460px)] md:-translate-y-1/2 md:opacity-100">
+        {/* soft aura behind card */}
+        <div
+          className="absolute left-1/2 top-[10%] aspect-square w-[110%] -translate-x-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(139,92,246,0.4), rgba(96,165,250,0.12) 45%, transparent 70%)",
+            filter: "blur(40px)",
+          }}
+        />
+
+        <motion.div
+          style={{
+            x: cardX,
+            y: cardY,
+            rotateX: tiltX,
+            rotateY: tiltY,
+            transformPerspective: 1100,
+          }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.9, delay: 0.25 }}
+          className="relative"
+        >
+          {/* floating: available freelance (peeks above card) */}
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-[9%] left-[14%] z-0 hidden items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-2.5 backdrop-blur-xl md:flex"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-500/25 text-violet-300">
+              ✦
+            </span>
+            <span className="leading-tight">
+              <span className="block text-xs text-white/60">Available</span>
+              <span className="block text-base font-bold text-white">
+                Freelance
+              </span>
+            </span>
+          </motion.div>
+
+          {/* floating: code window (behind card, left) */}
+          <motion.div
+            animate={{ y: [0, 7, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -left-[36%] top-[34%] z-0 hidden w-[64%] rounded-3xl border border-white/10 bg-white/[0.05] p-4 backdrop-blur-xl md:block"
+          >
+            <div className="flex gap-1.5">
+              <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/80" />
+              <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+            </div>
+            <pre className="mt-3 font-mono text-[10px] leading-[1.7] text-white/35">
+              {`const dev = {
+  name: "Naveen",
+  stack: [
+    "React",
+    "NestJS",
+    "MongoDB"
+  ],
+  ship: () => "🚀"
+}`}
+            </pre>
+          </motion.div>
+
+          {/* floating: experience (moved left so it no longer covers the card text) */}
+          <motion.div
+            animate={{ y: [0, -7, 0] }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.8,
+            }}
+            className="absolute -bottom-[3%] -left-[44%] z-20 hidden items-center gap-3 rounded-2xl border border-white/10 bg-[#0d0a24]/80 px-4 py-2.5 backdrop-blur-xl md:flex"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-500/20 text-blue-300">
+              ▣
+            </span>
+            <span className="leading-tight">
+              <span className="block text-xs text-white/60">Experience</span>
+              <span className="block text-base font-bold text-white">
+                2+ Years
+              </span>
+            </span>
+          </motion.div>
+
+          {/* floating: location (peeks below card) */}
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{
+              duration: 5.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.4,
+            }}
+            className="absolute -bottom-[9%] right-[8%] z-0 hidden items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-2.5 backdrop-blur-xl md:flex"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-300">
+              ⌖
+            </span>
+            <span className="text-base font-bold text-white">
+              India · Remote
+            </span>
+          </motion.div>
+
+          {/* the card */}
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="relative z-10 rounded-[2rem] border border-white/10 bg-gradient-to-b from-white/[0.08] to-white/[0.02] p-4 shadow-[0_30px_80px_-20px_rgba(139,92,246,0.5)] backdrop-blur-xl"
+          >
+            {/* image area: photo is now full-bleed, full brightness */}
+            <div
+              className="relative isolate aspect-[4/5] w-full overflow-hidden rounded-3xl"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 70% 60%, #2a1670 0%, #120a30 50%, #07040f 100%)",
+              }}
             >
-              Fresh off the iron
-            </motion.span>
-
-            <h1 className="mt-6 text-5xl font-black uppercase leading-[0.95] text-white md:text-7xl">
-              {["Every", "bite", "is", "a"].map((w, k) => (
-                <motion.span
-                  key={w}
-                  className="mr-4 inline-block"
-                  initial={{ opacity: 0, y: 60, rotate: 6 }}
-                  animate={{ opacity: 1, y: 0, rotate: 0 }}
-                  transition={{
-                    delay: 0.15 * k,
-                    type: "spring",
-                    stiffness: 120,
+              {/* optional poster text, only if your photo doesn't already contain it */}
+              {SHOW_POSTER_TEXT && (
+                <div
+                  className="absolute inset-x-0 top-0 -translate-y-[7%] select-none px-5 font-black uppercase leading-[0.95] text-[#6b5bd0]/60"
+                  style={{
+                    fontFamily: "Impact, 'Arial Narrow Bold', sans-serif",
+                    fontSize: "clamp(3.6rem, 7vw, 6.5rem)",
                   }}
                 >
-                  {w}
-                </motion.span>
-              ))}
-              <br />
-              <span className="relative inline-block h-[1.1em] overflow-hidden align-bottom text-[#e0a15f]">
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    key={WORDS[i]}
-                    className="inline-block"
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    exit={{ y: "-100%" }}
-                    transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
-                  >
-                    {WORDS[i]}.
-                  </motion.span>
-                </AnimatePresence>
-              </span>
-            </h1>
+                  <div>Build.</div>
+                  <div>Learn</div>
+                  <div>Evolve</div>
+                </div>
+              )}
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-              className="mt-6 max-w-md text-lg text-white/75"
-            >
-              Waffles, shakes and sweet chaos. Come hungry, leave sticky.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1 }}
-              className="mt-8 flex gap-4"
-            >
-              <Link
-                href="/menu"
-                className="rounded-full bg-[#f2c14e] px-8 py-3 font-black uppercase tracking-wider text-[#3a0d12] transition hover:-translate-y-1 hover:shadow-[0_10px_0_#b8861f]"
-              >
-                View Menu
-              </Link>
-              <Link
-                href="/contact"
-                className="rounded-full border-2 border-white/80 px-8 py-3 font-black uppercase tracking-wider text-white transition hover:bg-white hover:text-[#3a0d12]"
-              >
-                Find Us
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* LOGO MEDALLION */}
-          <div className="flex justify-center" style={{ perspective: 900 }}>
-            <motion.div
-              style={{ rotateX: tiltX, rotateY: tiltY }}
-              initial={{ scale: 0, rotate: -120 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 70,
-                damping: 12,
-                delay: 0.3,
-              }}
-              className="relative h-[300px] w-[300px] md:h-[420px] md:w-[420px]"
-            >
+              {/* photo: no blend mode, no heavy mask, so it stays bright and sharp.
+                  Wipes up on load, then drifts with the cursor (parallax). */}
               <motion.div
-                className="absolute -inset-6 rounded-full border-2 border-dashed border-[#e0a15f]"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                style={{ x: photoX, y: photoY }}
+                initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+                animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+                transition={{
+                  duration: 1.1,
+                  delay: 0.4,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="absolute -inset-[4%]"
+              >
+                <Image
+                  src={PHOTO}
+                  alt={FULL_NAME}
+                  fill
+                  priority
+                  sizes="(min-width:768px) 30vw, 78vw"
+                  className="object-cover object-top"
+                />
+              </motion.div>
+
+              {/* violet rim light from the lower right (keeps the glow, not the dimming) */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 70% 55% at 85% 95%, rgba(139,92,246,0.45), transparent 70%)",
+                  mixBlendMode: "screen",
+                }}
               />
+
+              {/* cursor-following sheen */}
               <motion.div
-                className="absolute -inset-12 rounded-full border border-[#e0a15f]/40"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+                className="pointer-events-none absolute inset-0"
+                style={{ background: sheen, mixBlendMode: "soft-light" }}
               />
-              <Image
-                src={assets.images.logo}
-                alt="Broffles"
-                fill
-                priority
-                className="rounded-full object-cover shadow-[0_0_80px_rgba(224,161,95,0.45)]"
+
+              {/* gentle bottom fade so the footer text blends in */}
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-[28%]"
+                style={{
+                  background:
+                    "linear-gradient(to top, rgba(7,4,15,0.8), transparent)",
+                }}
               />
-            </motion.div>
-          </div>
-        </div>
 
-        {/* LIQUID WAVE */}
-        <svg
-          className="absolute bottom-0 left-0 w-full"
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          style={{ height: 110 }}
-        >
-          <motion.path
-            fill="#f6e7cf"
-            animate={{
-              d: [
-                "M0,60 C240,20 480,100 720,60 C960,20 1200,100 1440,60 L1440,120 L0,120 Z",
-                "M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z",
-                "M0,60 C240,20 480,100 720,60 C960,20 1200,100 1440,60 L1440,120 L0,120 Z",
-              ],
-            }}
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </svg>
-      </section>
+              {/* tiny code snippet */}
+              <pre className="pointer-events-none absolute bottom-3 left-4 font-mono text-[7px] leading-[1.5] text-violet-200/50">
+                {`const dev = {
+  name: "Naveen",
+  stack: ["React", "Nest"],
+  passion: "Building scalable
+    digital experiences",
+};`}
+              </pre>
 
-      {/* TICKER */}
-      <div className="relative -mt-2 overflow-hidden bg-[#f6e7cf] py-6">
-        <div className="-rotate-2 bg-[#3a0d12] py-3">
+              {/* thin inner border for a crisp frame */}
+              <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-violet-300/20" />
+            </div>
+
+            {/* card footer */}
+            <div className="px-2 pb-1 pt-4">
+              <p className="text-2xl font-bold text-white">{FULL_NAME}</p>
+              <p className="mt-0.5 text-base text-white/60">{ROLE}</p>
+              <div className="mt-4 flex items-center justify-between font-mono text-sm">
+                <span className="inline-flex items-center gap-2 text-emerald-400">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
+                  Online
+                </span>
+                <span className="text-white/50">{VERSION}</span>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* ===== TEXT ===== */}
+      <div className="relative z-20 mx-auto flex min-h-screen max-w-7xl items-center px-6 pb-40 pt-36">
+        <div className="max-w-2xl">
           <motion.div
-            className="flex w-max whitespace-nowrap text-2xl font-black uppercase text-[#f2c14e]"
-            animate={{ x: ["0%", "-30%"] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-sm text-pale"
           >
-            {Array.from({ length: 12 }).map((_, k) => (
-              <span key={k} className="mx-6">
-                Waffles ✦ Shakes ✦ Brownies ✦ Broffles ✦
+            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
+            available for opportunities
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8 font-mono text-base text-white/60"
+          >
+            Hello, world. I&apos;m{" "}
+            <span className="text-white">{FULL_NAME}</span>
+          </motion.p>
+
+          <h1 className="mt-3 text-[clamp(2.75rem,4.8vw,5.25rem)] font-black leading-[1.02] tracking-tight">
+            <span className="block overflow-hidden pb-1">
+              <motion.span
+                className="block text-white"
+                initial={{ y: "110%" }}
+                animate={{ y: 0 }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                I build
+              </motion.span>
+            </span>
+            {/* nowrap stops the scramble glyphs from breaking onto extra lines */}
+            <span className="text-gradient block w-max min-h-[1.2em] whitespace-nowrap pb-2">
+              {phrase}
+              <span className="caret" />
+            </span>
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            className="mt-5 max-w-lg text-xl text-white/70 md:text-2xl"
+          >
+            {TAGLINE}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.05 }}
+            className="mt-8 flex flex-wrap gap-4"
+          >
+            <a
+              href="#projects"
+              className="glow-electric group inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[oklch(0.72_0.21_250)] to-[oklch(0.68_0.25_300)] px-9 py-4 text-lg font-semibold text-white transition hover:-translate-y-1"
+            >
+              View Projects
+              <span className="transition group-hover:translate-x-1">→</span>
+            </a>
+            <a
+              href="#contact"
+              className="glass inline-flex items-center gap-2 rounded-2xl px-9 py-4 text-lg font-semibold text-white transition hover:-translate-y-1 hover:bg-white/10"
+            >
+              Contact Me
+            </a>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.3 }}
+            className="mt-12 flex gap-12 border-t border-white/10 pt-6"
+          >
+            {STATS.map((s) => (
+              <div key={s.v}>
+                <p className="text-gradient text-4xl font-black md:text-5xl">
+                  {s.k}
+                </p>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/50">
+                  {s.v}
+                </p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* vertical label */}
+      <div className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 font-mono text-[10px] tracking-[0.45em] text-white/30 [writing-mode:vertical-rl] lg:block">
+        PORTFOLIO · 2026 · SCROLL ↓
+      </div>
+
+      {/* tech ticker */}
+      <div className="absolute inset-x-0 bottom-6 z-30 px-6">
+        <div
+          className="glass mx-auto max-w-7xl overflow-hidden rounded-full py-3"
+          style={{
+            maskImage:
+              "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+          }}
+        >
+          <motion.div
+            className="flex w-max whitespace-nowrap font-mono text-sm text-pale/80"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
+          >
+            {[...STACK, ...STACK].map((s, k) => (
+              <span key={k} className="mx-5 inline-flex items-center gap-10">
+                {s}
+                <span className="text-glow">✦</span>
               </span>
             ))}
           </motion.div>
         </div>
       </div>
-    </>
+    </section>
   );
 }

@@ -26,7 +26,7 @@ const actions = [
   },
   {
     label: "WhatsApp Us",
-    href: `https://wa.me/${WA}?text=Hi%20Broffles%2C%20I%27m%20interested%20in%20a%20franchise`,
+    href: `https://wa.me/${WA}?text=Hi%20Naveen%2C%20I%27m%20interested%20in%20a%20franchise`,
     icon: WhatsAppIcon,
     cls: "bg-[#3fa35c] text-white",
   },
@@ -120,7 +120,7 @@ export default function StickyCTA() {
             <div className="mx-auto flex max-w-7xl items-center gap-4 px-6 py-4">
               <div className="shrink-0">
                 <p className="font-display text-xl font-bold text-gold-400">
-                  Own a Broffles franchise
+                  Own a Naveen franchise
                 </p>
                 <p className="text-xs text-cream-200/70">
                   Low investment · Proven model · 30+ outlets

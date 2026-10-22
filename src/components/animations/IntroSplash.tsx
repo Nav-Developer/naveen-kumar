@@ -71,7 +71,7 @@ export default function IntroSplash() {
         variant="h4"
         sx={{ fontFamily: "var(--font-playfair)", textAlign: "center" }}
       >
-        Broffles Chef
+        Naveen Kumar
       </Typography>
 
       <Button

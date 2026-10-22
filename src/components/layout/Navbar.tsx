@@ -1,232 +1,143 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import {
-  AppBar,
-  Toolbar,
-  Button,
-  Box,
-  IconButton,
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemText,
-  Divider,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import assets from "@/assets";
-
-const LOGO_SRC = assets.images.logo;
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const links = [
-  { label: "Home", href: "/" },
-  { label: "Menu", href: "/menu" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { href: "#about", label: "About" },
+  { href: "#skills", label: "Skills" },
+  { href: "#experience", label: "Experience" },
+  { href: "#projects", label: "Projects" },
+  { href: "#services", label: "Services" },
+  { href: "#contact", label: "Contact" },
 ];
 
-function Logo({ size }: { size: number }) {
-  return (
-    <Box
-      sx={{
-        position: "relative",
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        overflow: "hidden",
-        border: "3px solid",
-        borderColor: "secondary.main",
-        bgcolor: "#fff",
-        flexShrink: 0,
-      }}
-    >
-      <Image
-        src={LOGO_SRC}
-        alt="Broffles"
-        fill
-        priority
-        sizes="80px"
-        style={{
-          objectFit: "cover",
-          transform: "scale(1)",
-          transformOrigin: "52% 30%",
-        }}
-      />
-    </Box>
-  );
-}
-
-export default function Navbar() {
+export function Nav() {
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
+  const [active, setActive] = useState("");
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // highlight the link of the section currently in view
+  useEffect(() => {
+    const els = links
+      .map((l) => document.querySelector(l.href))
+      .filter(Boolean) as Element[];
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(`#${e.target.id}`);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <>
-      <AppBar
-        position="fixed"
-        elevation={0}
-        sx={{
-          bgcolor: "primary.dark",
-          color: "#fff",
-          borderBottom: "2px solid",
-          borderColor: "secondary.main",
-        }}
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.3, duration: 0.6 }}
+      className={`fixed left-1/2 top-4 z-50 -translate-x-1/2 transition-all duration-500 ${
+        scrolled ? "w-[min(960px,92vw)]" : "w-[min(1100px,94vw)]"
+      }`}
+    >
+      <nav
+        className={`flex items-center justify-between rounded-2xl px-5 py-3 ${
+          scrolled ? "glass-strong" : "glass"
+        }`}
       >
-        <Toolbar
-          sx={{
-            minHeight: { xs: 72, md: 96 },
-            justifyContent: { xs: "space-between", md: "center" },
-            gap: { md: 5 },
-          }}
+        <a
+          href="#"
+          className="flex items-center gap-2 text-lg font-bold text-white"
         >
-          <Link href="/" style={{ display: "flex" }}>
-            <Logo size={64} />
-          </Link>
+          <span className="glow-electric inline-block h-7 w-7 rounded-lg bg-gradient-to-br from-[oklch(0.72_0.21_250)] via-[oklch(0.68_0.25_300)] to-[oklch(0.78_0.18_165)]" />
+          <span>
+            Naveen<span className="text-gradient">.</span>
+          </span>
+        </a>
 
-          {/* Desktop */}
-          <Box
-            sx={{
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-              gap: 3,
-            }}
+        <ul className="hidden items-center gap-1 text-sm md:flex">
+          {links.map((l) => (
+            <li key={l.href} className="relative">
+              {active === l.href && (
+                <motion.span
+                  layoutId="nav-pill"
+                  className="absolute inset-0 rounded-lg bg-white/10"
+                  transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                />
+              )}
+              <a
+                href={l.href}
+                className={`relative block rounded-lg px-3 py-2 transition-colors hover:text-white ${
+                  active === l.href ? "text-white" : "text-white/60"
+                }`}
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex items-center gap-2">
+          <a
+            href="#contact"
+            className="glow-electric rounded-xl bg-gradient-to-r from-[oklch(0.72_0.21_250)] to-[oklch(0.68_0.25_300)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
           >
-            {links.map((l) => {
-              const active = pathname === l.href;
-              return (
-                <Button
-                  key={l.href}
-                  component={Link}
+            Let&apos;s Talk
+          </a>
+          <button
+            aria-label="Menu"
+            onClick={() => setOpen((o) => !o)}
+            className="glass flex h-9 w-9 flex-col items-center justify-center gap-1 rounded-xl md:hidden"
+          >
+            <span
+              className={`h-0.5 w-4 bg-white transition ${open ? "translate-y-1.5 rotate-45" : ""}`}
+            />
+            <span
+              className={`h-0.5 w-4 bg-white transition ${open ? "opacity-0" : ""}`}
+            />
+            <span
+              className={`h-0.5 w-4 bg-white transition ${open ? "-translate-y-1.5 -rotate-45" : ""}`}
+            />
+          </button>
+        </div>
+      </nav>
+
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            initial={{ opacity: 0, y: -10, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.97 }}
+            className="glass-strong mt-2 flex flex-col rounded-2xl p-2 md:hidden"
+          >
+            {links.map((l) => (
+              <li key={l.href}>
+                <a
                   href={l.href}
-                  disableRipple
-                  //   startIcon={<StarIcon sx={{ fontSize: "14px !important" }} />}
-                  sx={{
-                    color: active ? "secondary.main" : "#fff",
-                    fontSize: "0.8rem",
-                    letterSpacing: "0.18em",
-                    "& .MuiButton-startIcon": { color: "secondary.main" },
-                    "&:hover": {
-                      bgcolor: "transparent",
-                      color: "secondary.main",
-                    },
-                  }}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-xl px-4 py-3 text-white/80 hover:bg-white/10 hover:text-white"
                 >
                   {l.label}
-                </Button>
-              );
-            })}
-            <Button
-              component={Link}
-              href="/reservation"
-              variant="contained"
-              color="secondary"
-            >
-              Reserve
-            </Button>
-          </Box>
-
-          {/* Mobile */}
-          <IconButton
-            color="inherit"
-            aria-label="open menu"
-            onClick={() => setOpen(true)}
-            sx={{ display: { xs: "inline-flex", md: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-
-      <Drawer
-        anchor="right"
-        open={open}
-        onClose={() => setOpen(false)}
-        slotProps={{
-          paper: {
-            sx: {
-              width: "80vw",
-              maxWidth: 360,
-              bgcolor: "primary.dark",
-              color: "#fff",
-              display: "flex",
-              flexDirection: "column",
-            },
-          },
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            px: 2,
-            py: 1.5,
-          }}
-        >
-          <Link
-            href="/"
-            onClick={() => setOpen(false)}
-            style={{ display: "flex" }}
-          >
-            <Logo size={52} />
-          </Link>
-          <IconButton
-            aria-label="close menu"
-            onClick={() => setOpen(false)}
-            sx={{ color: "#fff", bgcolor: "rgba(255,255,255,0.1)" }}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
-        <Divider sx={{ borderColor: "rgba(247,209,84,0.4)" }} />
-
-        <List sx={{ px: 2, py: 0 }}>
-          {links.map((l) => (
-            <Box key={l.href}>
-              <ListItemButton
-                component={Link}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                sx={{ px: 0, py: 2 }}
-              >
-                <ListItemText
-                  primary={l.label}
-                  slotProps={{
-                    primary: {
-                      sx: {
-                        fontWeight: 700,
-                        letterSpacing: "0.15em",
-                        textTransform: "uppercase",
-                        fontSize: "0.85rem",
-                        color: pathname === l.href ? "secondary.main" : "#fff",
-                      },
-                    },
-                  }}
-                />
-              </ListItemButton>
-              <Divider sx={{ borderColor: "rgba(255,255,255,0.12)" }} />
-            </Box>
-          ))}
-        </List>
-
-        <Box sx={{ px: 2, mt: 3 }}>
-          <Button
-            component={Link}
-            href="/reservation"
-            variant="contained"
-            color="secondary"
-            fullWidth
-            size="large"
-            onClick={() => setOpen(false)}
-          >
-            Reserve a table
-          </Button>
-        </Box>
-      </Drawer>
-    </>
+                </a>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </motion.header>
   );
 }
+
+export { Nav as Navbar };
+export default Nav;
