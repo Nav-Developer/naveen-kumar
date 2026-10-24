@@ -60,7 +60,8 @@ export function Nav() {
           href="#"
           className="flex items-center gap-2 text-lg font-bold text-white"
         >
-          <span className="glow-electric inline-block h-7 w-7 rounded-lg bg-gradient-to-br from-[oklch(0.72_0.21_250)] via-[oklch(0.68_0.25_300)] to-[oklch(0.78_0.18_165)]" />
+          {/* <span className="glow-electric inline-block h-7 w-7 rounded-lg bg-gradient-to-br from-[oklch(0.72_0.21_250)] via-[oklch(0.68_0.25_300)] to-[oklch(0.78_0.18_165)]" /> */}
+
           <span>
             Naveen<span className="text-gradient">.</span>
           </span>

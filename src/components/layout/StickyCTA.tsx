@@ -8,21 +8,20 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 
-const PHONE = "+919XXXXXXXXX"; // TODO: client's number
-const WA = "919XXXXXXXXX"; // TODO: no + sign for wa.me
-
+const PHONE = "+919XXXXXXXXX";
+const WA = "919XXXXXXXXX";
 const actions = [
+  // {
+  //   label: "Call Franchise Desk",
+  //   href: `tel:${PHONE}`,
+  //   icon: PhoneIcon,
+  //   cls: "bg-wine-950 text-cream-200 border border-gold-400/50",
+  // },
   {
-    label: "Call Franchise Desk",
-    href: `tel:${PHONE}`,
-    icon: PhoneIcon,
-    cls: "bg-wine-950 text-cream-200 border border-gold-400/50",
-  },
-  {
-    label: "Become a Partner",
+    label: "Mail",
     href: "/contact#franchise",
     icon: StorefrontIcon,
-    cls: "bg-gold-400 text-wine-950",
+    cls: "",
   },
   {
     label: "WhatsApp Us",
@@ -70,7 +69,7 @@ export default function StickyCTA() {
       setStatus("error");
     }
   }
-
+  const data = false;
   return (
     <>
       <div
@@ -98,13 +97,15 @@ export default function StickyCTA() {
             ))}
         </AnimatePresence>
 
-        <button
-          aria-label={fabOpen ? "Close quick actions" : "Open quick actions"}
-          onClick={() => setFabOpen((v) => !v)}
-          className="grid h-14 w-14 place-items-center rounded-full border border-gold-400/60 bg-wine-950 text-gold-400 shadow-2xl transition hover:scale-105"
-        >
-          {fabOpen ? <CloseIcon /> : <MenuIcon />}
-        </button>
+        {data && (
+          <button
+            aria-label={fabOpen ? "Close quick actions" : "Open quick actions"}
+            onClick={() => setFabOpen((v) => !v)}
+            className="grid h-14 w-14 place-items-center rounded-full border border-gold-400/60 bg-wine-950 text-gold-400 shadow-2xl transition hover:scale-105 visible-hidden"
+          >
+            {fabOpen ? <CloseIcon /> : <MenuIcon />}
+          </button>
+        )}
       </div>
 
       {/* ---------- Sticky enquiry bar (desktop) ---------- */}

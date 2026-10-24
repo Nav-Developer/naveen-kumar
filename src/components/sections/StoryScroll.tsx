@@ -1,224 +1,277 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
+import { Box, Typography } from "@mui/material";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import cone from "@/assets/Images/waffle.png";
+
 import { chapters } from "@/data/story";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const STEP = 3;
 
+const RUNNER_GIF = "https://placehold.co/120x160/png?text=Runner";
+
+const WALL = ["Labels", "Doubt", "Mocking", "Limits", "Fear"];
+
 export default function StoryScroll() {
-  const root = useRef<HTMLElement>(null);
+  const container = useRef<HTMLDivElement>(null);
+  const stage = useRef<HTMLDivElement>(null);
+  const runner = useRef<HTMLDivElement>(null);
+  const ground = useRef<HTMLDivElement>(null);
+  const textRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // chapter 1
+  const wall = useRef<HTMLDivElement>(null);
+  const wallPieces = useRef<(HTMLDivElement | null)[]>([]);
+
+  // chapter 2
+  const net = useRef<HTMLDivElement>(null);
+  const ball = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
-      const total = chapters.length * STEP;
-      const last = chapters.length - 1;
-
-      gsap.set(".chapter", { autoAlpha: 0 });
+      ScrollTrigger.create({
+        trigger: container.current,
+        start: "top top",
+        end: "bottom bottom",
+        pin: stage.current,
+        pinSpacing: false,
+      });
 
       const tl = gsap.timeline({
-        defaults: { ease: "power2.out" },
+        defaults: { ease: "none" },
         scrollTrigger: {
-          trigger: root.current,
+          trigger: container.current,
           start: "top top",
-          end: `+=${chapters.length * 1400}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
+          end: "bottom bottom",
+          scrub: true,
+          invalidateOnRefresh: true,
         },
       });
 
-      chapters.forEach((_, i) => {
-        const t = i * STEP;
-        const sel = `.chapter-${i}`;
+      // ground scrolls left the whole time (runner stays fixed)
+      tl.to(
+        ground.current,
+        { backgroundPositionX: "-4000px", duration: chapters.length },
+        0,
+      );
 
-        tl.to(sel, { autoAlpha: 1, duration: 0.4 }, t)
-          .fromTo(
-            `${sel} .reveal`,
-            { y: 60, opacity: 0 },
-            { y: 0, opacity: 1, stagger: 0.12, duration: 0.8 },
-            t,
-          )
-          .fromTo(
-            `${sel} .photo`,
-            { clipPath: "inset(0 100% 0 0)", scale: 1.15 },
-            { clipPath: "inset(0 0% 0 0)", scale: 1, duration: 1.2 },
-            t,
-          )
-          .fromTo(
-            `${sel} .bignum`,
-            { xPercent: -15, opacity: 0 },
-            { xPercent: 0, opacity: 1, duration: 1 },
-            t,
-          );
+      // ---------- chapter 1 (0 to 1): wall comes, then breaks ----------
+      tl.to(
+        wall.current,
+        { x: () => -window.innerWidth * 0.2, duration: 0.6 },
+        0,
+      );
 
-        if (i < last) {
-          tl.to(
-            sel,
-            { autoAlpha: 0, y: -40, duration: 0.5, ease: "power2.in" },
-            t + STEP - 0.6,
-          );
-        }
-      });
-
-      // Animated counters in the final chapter
-      root.current?.querySelectorAll<HTMLElement>(".stat").forEach((el) => {
-        const o = { v: 0 };
+      wallPieces.current.forEach((el, i) => {
+        if (!el) return;
         tl.to(
-          o,
+          el,
           {
-            v: Number(el.dataset.value),
-            duration: 1.4,
-            ease: "power1.out",
-            snap: { v: 1 },
-            onUpdate: () => {
-              el.textContent = String(o.v);
-            },
+            x: 250 + i * 60,
+            y: (i - 2) * 160,
+            rotation: (i - 2) * 45,
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out",
           },
-          last * STEP + 0.3,
+          0.6,
         );
       });
 
-      // Gold progress line + cone travelling along it
+      // ---------- chapter 2 (1 to 2): net, ball, jump ----------
       tl.fromTo(
-        ".track-fill",
-        { scaleX: 0 },
-        { scaleX: 1, ease: "none", duration: total },
-        0,
+        net.current,
+        { opacity: 0, x: 300 },
+        { opacity: 1, x: 0, duration: 0.5 },
+        1,
       );
-      tl.fromTo(
-        ".cone",
-        { left: "0%" },
-        { left: "100%", ease: "none", duration: total },
-        0,
+      tl.to(net.current, { opacity: 0, duration: 0.2 }, 1.8);
+
+      // ball appears and flies over the net
+      tl.set(ball.current, { opacity: 1 }, 1.2);
+      tl.to(ball.current, { x: 350, duration: 0.8 }, 1.2);
+      tl.to(ball.current, { y: -220, duration: 0.4, ease: "power2.out" }, 1.2);
+      tl.to(ball.current, { y: 0, duration: 0.4, ease: "power2.in" }, 1.6);
+      tl.to(ball.current, { opacity: 0, duration: 0.1 }, 1.9);
+
+      // runner jumps in the middle of chapter 2
+      tl.to(
+        runner.current,
+        { y: -160, duration: 0.2, ease: "power2.out" },
+        1.4,
       );
-      tl.to(".cone", { rotate: 360, ease: "none", duration: total }, 0);
+      tl.to(runner.current, { y: 0, duration: 0.2, ease: "power2.in" }, 1.6);
+
+      // ---------- text for every chapter ----------
+      chapters.forEach((_, i) => {
+        const el = textRefs.current[i];
+        if (!el) return;
+        if (i > 0) tl.to(el, { opacity: 1, duration: 0.3 }, i);
+        if (i < chapters.length - 1)
+          tl.to(el, { opacity: 0, duration: 0.3 }, i + 0.7);
+      });
     },
-    { scope: root },
+    { scope: container },
   );
 
   return (
-    <section
-      ref={root}
-      className="relative h-screen overflow-hidden text-cream-200"
-      style={{
-        background:
-          "radial-gradient(ellipse at 75% 40%, #7a1f26 0%, #4a1820 40%, #1f070b 100%)",
-      }}
+    <Box
+      ref={container}
+      sx={{ height: `${chapters.length * STEP * 100}vh`, position: "relative" }}
     >
-      {/* subtle grain + vignette for a premium feel */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:radial-gradient(#fff_1px,transparent_1px)] [background-size:3px_3px]" />
-      <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_200px_rgba(0,0,0,0.6)]" />
+      <Box
+        ref={stage}
+        sx={{
+          height: "100vh",
+          bgcolor: "#111",
+          color: "#fff",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* ground */}
+        <Box
+          ref={ground}
+          sx={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 80,
+            background:
+              "repeating-linear-gradient(90deg, #333 0 40px, #222 40px 80px)",
+          }}
+        />
 
-      {chapters.map((c, i) => (
-        <div
-          key={i}
-          className={`chapter chapter-${i} absolute inset-0 grid items-center gap-10 px-8 pb-28 pt-36 md:grid-cols-2 md:px-20`}
-        >
-          {/* huge outlined chapter number */}
-          <span
-            className="bignum pointer-events-none absolute left-8 top-28 font-display text-[16rem] font-black leading-none text-transparent md:left-16"
-            style={{ WebkitTextStroke: "1px rgba(233,196,106,0.18)" }}
+        {/* chapter text */}
+        {chapters.map((chapter, i) => (
+          <Box
+            key={chapter.id}
+            ref={(el: HTMLDivElement | null) => {
+              textRefs.current[i] = el;
+            }}
+            sx={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 2,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              pt: "10vh",
+              textAlign: "center",
+              px: 3,
+              opacity: i === 0 ? 1 : 0,
+              pointerEvents: "none",
+            }}
           >
-            0{i + 1}
-          </span>
+            <Typography variant="h3" sx={{ mb: 2 }}>
+              {chapter.title}
+            </Typography>
+            <Typography variant="h6" sx={{ maxWidth: 700 }}>
+              {chapter.text}
+            </Typography>
+          </Box>
+        ))}
 
-          <div className="relative z-10">
-            <p className="reveal mb-4 inline-block rounded-full bg-gold-400 px-4 py-1.5 text-xs font-extrabold uppercase tracking-[0.25em] text-wine-950">
-              {c.tag}
-            </p>
-            <h2 className="reveal font-sans text-4xl font-black uppercase leading-[1.05] text-white md:text-6xl">
-              {c.title}
-            </h2>
-            <div className="reveal my-6 h-px w-24 bg-gradient-to-r from-gold-400 to-transparent" />
-            <p className="reveal max-w-md text-lg text-cream-200/75">
-              {c.text}
-            </p>
-
-            {c.stats && (
-              <div className="reveal mt-10 flex gap-10">
-                {c.stats.map((s) => (
-                  <div key={s.label}>
-                    <p className="font-display text-5xl font-black text-gold-400 md:text-6xl">
-                      <span className="stat" data-value={s.value}>
-                        0
-                      </span>
-                      {s.suffix}
-                    </p>
-                    <p className="mt-1 text-xs font-bold uppercase tracking-[0.2em] text-cream-200/70">
-                      {s.label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* {c.image && (
-            <div className="relative z-10 mx-auto w-full max-w-md">
-              <div className="photo relative aspect-[4/5] overflow-hidden rounded-2xl border border-gold-400/60 shadow-[0_30px_80px_rgba(0,0,0,0.6)]">
-                <Image
-                  src={c.image}
-                  alt={c.title}
-                  fill
-                  sizes="(min-width:808px) 28rem, 90vw"
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-wine-950/60 via-transparent to-transparent" />
-              </div>
-            </div>
-          )} */}
-          {c.image && (
-            <div
-              className={`relative z-10 mx-auto w-full ${
-                c.aspect === "tall" ? "max-w-md" : "max-w-2xl"
-              }`}
+        {/* chapter 1: wall */}
+        <Box
+          ref={wall}
+          sx={{
+            position: "absolute",
+            left: "60%",
+            bottom: 80,
+            zIndex: 1,
+            display: "flex",
+            flexDirection: "column-reverse",
+          }}
+        >
+          {WALL.map((label, i) => (
+            <Box
+              key={label}
+              ref={(el: HTMLDivElement | null) => {
+                wallPieces.current[i] = el;
+              }}
+              sx={{
+                width: 140,
+                height: 70,
+                bgcolor: "#b23a48",
+                border: "2px solid #111",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 700,
+              }}
             >
-              <div
-                className={`photo relative overflow-hidden rounded-2xl border border-gold-400/60 shadow-[0_30px_80px_rgba(0,0,0,0.6)] ${
-                  c.aspect === "tall" ? "aspect-[4/5]" : "aspect-[4/3]"
-                }`}
-              >
-                <Image
-                  src={c.image}
-                  alt={c.title}
-                  fill
-                  sizes={
-                    c.aspect === "tall"
-                      ? "(min-width:768px) 28rem, 90vw"
-                      : "(min-width:768px) 42rem, 90vw"
-                  }
-                  className={`object-cover ${
-                    c.aspect === "tall" ? "object-center" : "object-top"
-                  }`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-wine-950/60 via-transparent to-transparent" />
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              {label}
+            </Box>
+          ))}
+        </Box>
 
-      {/* Progress track with travelling waffle cone */}
-      <div className="absolute inset-x-8 bottom-10 md:inset-x-20">
-        <div className="relative h-px bg-gold-400/25">
-          <div className="track-fill h-full origin-left bg-gold-400" />
-          <div className="cone absolute top-1/2 w-12 -translate-x-1/2 -translate-y-1/2 md:w-14">
-            <Image
-              src={cone}
-              alt=""
-              sizes="56px"
-              className="h-auto w-full drop-shadow-[0_6px_10px_rgba(0,0,0,0.5)]"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
+        {/* chapter 2: net */}
+        <Box
+          ref={net}
+          sx={{
+            position: "absolute",
+            left: "65%",
+            bottom: 80,
+            zIndex: 1,
+            width: 12,
+            height: 240,
+            bgcolor: "#eee",
+            opacity: 0,
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 12,
+              width: 160,
+              height: 90,
+              border: "2px solid #eee",
+            },
+          }}
+        />
+
+        {/* chapter 2: ball */}
+        <Box
+          ref={ball}
+          sx={{
+            position: "absolute",
+            left: "28%",
+            bottom: 140,
+            zIndex: 1,
+            width: 40,
+            height: 40,
+            borderRadius: "50%",
+            bgcolor: "#f4d35e",
+            opacity: 0,
+          }}
+        />
+
+        {/* runner (gif placeholder) */}
+        <Box
+          ref={runner}
+          sx={{
+            position: "absolute",
+            left: "20%",
+            bottom: 80,
+            zIndex: 1,
+            width: 120,
+            height: 160,
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={RUNNER_GIF}
+            alt="runner"
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
+        </Box>
+      </Box>
+    </Box>
   );
 }

@@ -2,31 +2,26 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
-    mode: "light",
-    primary: { main: "#D2282E", dark: "#8E1B1B", contrastText: "#FFFFFF" },
-    secondary: { main: "#F7D154", contrastText: "#3B0D0D" },
-    background: { default: "#F5E1C0", paper: "#FFF8EC" },
-    text: { primary: "#2A1210", secondary: "#5A3A35" },
-  },
-  typography: {
-    fontFamily: "var(--font-montserrat), sans-serif",
-    h1: { fontFamily: "var(--font-bodoni), serif", fontWeight: 700 },
-    h2: { fontFamily: "var(--font-bodoni), serif", fontWeight: 700 },
-    h3: { fontFamily: "var(--font-bodoni), serif", fontWeight: 600 },
-    h4: { fontFamily: "var(--font-bodoni), serif", fontWeight: 600 },
-  },
-  shape: { borderRadius: 4 },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: "uppercase",
-          letterSpacing: "0.08em",
-          fontWeight: 800,
-          borderRadius: 2,
-          paddingInline: 28,
-        },
-      },
+    mode: "dark",
+    primary: {
+      main: "#07040f", // dark base (hero + footer bg)
+      light: "#1a0b3d", // purple glow
+      dark: "#05030a", // deepest edge
+      contrastText: "#ffffff",
+    },
+    secondary: {
+      main: "#8b5cf6", // violet accent (borders, highlights)
+      light: "#a78bfa",
+      dark: "#60a5fa", // blue end of your gradient
+      contrastText: "#ffffff",
+    },
+    background: {
+      default: "#07040f",
+      paper: "#0d0a24",
+    },
+    text: {
+      primary: "#ffffff",
+      secondary: "rgba(255,255,255,0.6)",
     },
   },
 });

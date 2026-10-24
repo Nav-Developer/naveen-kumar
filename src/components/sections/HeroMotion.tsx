@@ -168,7 +168,7 @@ export default function HeroMotion() {
     <section
       ref={ref}
       onMouseMove={onMove}
-      className="relative min-h-screen overflow-hidden"
+      className="relative flex min-h-screen flex-col overflow-hidden md:block"
       style={
         {
           "--mx": "72%",
@@ -215,8 +215,105 @@ export default function HeroMotion() {
         />
       ))}
 
-      {/* ===== PORTRAIT CARD ===== */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-24 mx-auto w-[min(78vw,340px)] opacity-40 md:inset-x-auto md:bottom-auto md:right-[6%] md:top-1/2 md:mx-0 md:w-[min(32vw,460px)] md:-translate-y-1/2 md:opacity-100">
+      {/* ===== TEXT ===== */}
+      <div className="relative z-20 order-1 mx-auto flex w-full max-w-7xl items-center px-5 pb-6 pt-28 md:min-h-screen md:px-6 md:pb-40 md:pt-36">
+        <div className="w-full max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-xs text-pale md:text-sm"
+          >
+            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
+            available for opportunities
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-6 font-mono text-sm text-white/60 md:mt-8 md:text-base"
+          >
+            Hello, world. I&apos;m{" "}
+            <span className="text-white">{FULL_NAME}</span>
+          </motion.p>
+
+          <h1 className="mt-3 text-[clamp(2.4rem,4.8vw,5.25rem)] font-black leading-[1.02] tracking-tight">
+            <span className="block overflow-hidden pb-1">
+              <motion.span
+                className="block text-white"
+                initial={{ y: "110%" }}
+                animate={{ y: 0 }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                I build
+              </motion.span>
+            </span>
+            {/* nowrap stops the scramble glyphs from breaking onto extra lines */}
+            <span className="text-gradient block min-h-[1.2em] w-max max-w-full whitespace-nowrap pb-2">
+              {phrase}
+              <span className="caret" />
+            </span>
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            className="mt-4 max-w-lg text-base text-white/70 md:mt-5 md:text-2xl"
+          >
+            {TAGLINE}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.05 }}
+            className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:gap-4 md:mt-8"
+          >
+            <a
+              href="#projects"
+              className="glow-electric group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[oklch(0.72_0.21_250)] to-[oklch(0.68_0.25_300)] px-4 py-3.5 text-base font-semibold text-white transition hover:-translate-y-1 sm:px-9 md:py-4 md:text-lg"
+            >
+              View Projects
+              <span className="transition group-hover:translate-x-1">→</span>
+            </a>
+            <a
+              href="#contact"
+              className="glass inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-base font-semibold text-white transition hover:-translate-y-1 hover:bg-white/10 sm:px-9 md:py-4 md:text-lg"
+            >
+              Contact Me
+            </a>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.3 }}
+            className="mt-8 grid grid-cols-3 gap-3 border-t border-white/10 pt-5 md:mt-12 md:flex md:gap-12 md:pt-6"
+          >
+            {STATS.map((s) => (
+              <div key={s.v} className="min-w-0">
+                <p className="text-gradient text-3xl font-black md:text-5xl">
+                  {s.k}
+                </p>
+                <p className="mt-1 text-[10px] font-semibold uppercase leading-snug tracking-[0.1em] text-white/50 md:text-xs md:tracking-[0.2em]">
+                  {s.v}
+                </p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ===== PORTRAIT CARD =====
+          mobile: sits in normal flow BELOW the text (no overlap)
+          desktop: absolute on the right, same as before */}
+      <div className="pointer-events-none relative order-2 mx-auto mb-28 mt-6 w-[min(72vw,300px)] md:absolute md:inset-x-auto md:bottom-auto md:right-[6%] md:top-1/2 md:mx-0 md:mb-0 md:mt-0 md:w-[min(32vw,460px)] md:-translate-y-1/2">
         {/* soft aura behind card */}
         <div
           className="absolute left-1/2 top-[10%] aspect-square w-[110%] -translate-x-1/2 rounded-full"
@@ -281,7 +378,7 @@ export default function HeroMotion() {
             </pre>
           </motion.div>
 
-          {/* floating: experience (moved left so it no longer covers the card text) */}
+          {/* floating: experience */}
           <motion.div
             animate={{ y: [0, -7, 0] }}
             transition={{
@@ -328,7 +425,6 @@ export default function HeroMotion() {
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             className="relative z-10 rounded-[2rem] border border-white/10 bg-gradient-to-b from-white/[0.08] to-white/[0.02] p-4 shadow-[0_30px_80px_-20px_rgba(139,92,246,0.5)] backdrop-blur-xl"
           >
-            {/* image area: photo is now full-bleed, full brightness */}
             <div
               className="relative isolate aspect-[4/5] w-full overflow-hidden rounded-3xl"
               style={{
@@ -336,7 +432,6 @@ export default function HeroMotion() {
                   "radial-gradient(ellipse at 70% 60%, #2a1670 0%, #120a30 50%, #07040f 100%)",
               }}
             >
-              {/* optional poster text, only if your photo doesn't already contain it */}
               {SHOW_POSTER_TEXT && (
                 <div
                   className="absolute inset-x-0 top-0 -translate-y-[7%] select-none px-5 font-black uppercase leading-[0.95] text-[#6b5bd0]/60"
@@ -351,8 +446,6 @@ export default function HeroMotion() {
                 </div>
               )}
 
-              {/* photo: no blend mode, no heavy mask, so it stays bright and sharp.
-                  Wipes up on load, then drifts with the cursor (parallax). */}
               <motion.div
                 style={{ x: photoX, y: photoY }}
                 initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
@@ -369,12 +462,11 @@ export default function HeroMotion() {
                   alt={FULL_NAME}
                   fill
                   priority
-                  sizes="(min-width:768px) 30vw, 78vw"
+                  sizes="(min-width:768px) 30vw, 72vw"
                   className="object-cover object-top"
                 />
               </motion.div>
 
-              {/* violet rim light from the lower right (keeps the glow, not the dimming) */}
               <div
                 className="pointer-events-none absolute inset-0"
                 style={{
@@ -384,13 +476,11 @@ export default function HeroMotion() {
                 }}
               />
 
-              {/* cursor-following sheen */}
               <motion.div
                 className="pointer-events-none absolute inset-0"
                 style={{ background: sheen, mixBlendMode: "soft-light" }}
               />
 
-              {/* gentle bottom fade so the footer text blends in */}
               <div
                 className="pointer-events-none absolute inset-x-0 bottom-0 h-[28%]"
                 style={{
@@ -399,8 +489,7 @@ export default function HeroMotion() {
                 }}
               />
 
-              {/* tiny code snippet */}
-              <pre className="pointer-events-none absolute bottom-3 left-4 font-mono text-[7px] leading-[1.5] text-violet-200/50">
+              <pre className="pointer-events-none absolute bottom-3 left-4 hidden font-mono text-[7px] leading-[1.5] text-violet-200/50 md:block">
                 {`const dev = {
   name: "Naveen",
   stack: ["React", "Nest"],
@@ -409,15 +498,18 @@ export default function HeroMotion() {
 };`}
               </pre>
 
-              {/* thin inner border for a crisp frame */}
               <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-violet-300/20" />
             </div>
 
             {/* card footer */}
             <div className="px-2 pb-1 pt-4">
-              <p className="text-2xl font-bold text-white">{FULL_NAME}</p>
-              <p className="mt-0.5 text-base text-white/60">{ROLE}</p>
-              <div className="mt-4 flex items-center justify-between font-mono text-sm">
+              <p className="text-xl font-bold text-white md:text-2xl">
+                {FULL_NAME}
+              </p>
+              <p className="mt-0.5 text-sm text-white/60 md:text-base">
+                {ROLE}
+              </p>
+              <div className="mt-3 flex items-center justify-between font-mono text-xs md:mt-4 md:text-sm">
                 <span className="inline-flex items-center gap-2 text-emerald-400">
                   <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
                   Online
@@ -429,108 +521,13 @@ export default function HeroMotion() {
         </motion.div>
       </div>
 
-      {/* ===== TEXT ===== */}
-      <div className="relative z-20 mx-auto flex min-h-screen max-w-7xl items-center px-6 pb-40 pt-36">
-        <div className="max-w-2xl">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 font-mono text-sm text-pale"
-          >
-            <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_10px_#34d399]" />
-            available for opportunities
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="mt-8 font-mono text-base text-white/60"
-          >
-            Hello, world. I&apos;m{" "}
-            <span className="text-white">{FULL_NAME}</span>
-          </motion.p>
-
-          <h1 className="mt-3 text-[clamp(2.75rem,4.8vw,5.25rem)] font-black leading-[1.02] tracking-tight">
-            <span className="block overflow-hidden pb-1">
-              <motion.span
-                className="block text-white"
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.5,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                I build
-              </motion.span>
-            </span>
-            {/* nowrap stops the scramble glyphs from breaking onto extra lines */}
-            <span className="text-gradient block w-max min-h-[1.2em] whitespace-nowrap pb-2">
-              {phrase}
-              <span className="caret" />
-            </span>
-          </h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
-            className="mt-5 max-w-lg text-xl text-white/70 md:text-2xl"
-          >
-            {TAGLINE}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.05 }}
-            className="mt-8 flex flex-wrap gap-4"
-          >
-            <a
-              href="#projects"
-              className="glow-electric group inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-[oklch(0.72_0.21_250)] to-[oklch(0.68_0.25_300)] px-9 py-4 text-lg font-semibold text-white transition hover:-translate-y-1"
-            >
-              View Projects
-              <span className="transition group-hover:translate-x-1">→</span>
-            </a>
-            <a
-              href="#contact"
-              className="glass inline-flex items-center gap-2 rounded-2xl px-9 py-4 text-lg font-semibold text-white transition hover:-translate-y-1 hover:bg-white/10"
-            >
-              Contact Me
-            </a>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.3 }}
-            className="mt-12 flex gap-12 border-t border-white/10 pt-6"
-          >
-            {STATS.map((s) => (
-              <div key={s.v}>
-                <p className="text-gradient text-4xl font-black md:text-5xl">
-                  {s.k}
-                </p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/50">
-                  {s.v}
-                </p>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-
       {/* vertical label */}
       <div className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 font-mono text-[10px] tracking-[0.45em] text-white/30 [writing-mode:vertical-rl] lg:block">
         PORTFOLIO · 2026 · SCROLL ↓
       </div>
 
       {/* tech ticker */}
-      <div className="absolute inset-x-0 bottom-6 z-30 px-6">
+      <div className="absolute inset-x-0 bottom-6 z-30 px-4 md:px-6">
         <div
           className="glass mx-auto max-w-7xl overflow-hidden rounded-full py-3"
           style={{
