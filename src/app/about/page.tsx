@@ -1,9 +1,5 @@
-import { Container, Typography } from "@mui/material";
+import AboutPage from "@/components/ui/AboutPage";
 
 export default function Page() {
-  return (
-    <Container sx={{ pt: 14, pb: 8 }}>
-      <Typography variant="h2">About</Typography>
-    </Container>
-  );
+  return <AboutPage />;
 }
