@@ -31,7 +31,7 @@ export default function RootLayout({
           <Navbar />
           <main>{children}</main>
           <Footer />
-          <StickyCTA />
+          {/* <StickyCTA /> */}
         </ThemeRegistry>
       </body>
     </html>

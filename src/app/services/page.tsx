@@ -1,9 +1,11 @@
+import UnderConstruction from "@/components/ui/PageUnderConstruction";
 import { Container, Typography } from "@mui/material";
 
 export default function Page() {
   return (
-    <Container sx={{ pt: 14, pb: 8 }}>
-      <Typography variant="h2">Service</Typography>
-    </Container>
+    <UnderConstruction />
+    // <Container sx={{ pt: 14, pb: 8 }}>
+    //   <Typography variant="h2">Service</Typography>
+    // </Container>
   );
 }
