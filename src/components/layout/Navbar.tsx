@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import EnquiryDialog from "./EnquiryDialog";
+import { CONTACT_EMAIL, WHATSAPP_NUMBER } from "@/data/constant";
 
 type NavLink = {
   label: string;
@@ -18,7 +20,7 @@ const links: NavLink[] = [
   { label: "Experience", href: "/#experience", section: "experience" },
   { label: "Projects", href: "/projects" },
   { label: "Services", href: "/#services", section: "services" },
-  { label: "Contact", href: "/contact" },
+  // { label: "Contact", href: "/contact" },
 ];
 
 const sectionIds = links.flatMap((l) => (l.section ? [l.section] : []));
@@ -102,6 +104,8 @@ export function Nav() {
     setActiveSection("");
   };
 
+  const [enquiryOpen, setEnquiryOpen] = useState(false);
+
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -161,12 +165,29 @@ export function Nav() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
-          <Link
-            href="/contact"
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              setEnquiryOpen(true);
+            }}
             className="glow-electric rounded-xl bg-gradient-to-r from-[oklch(0.72_0.21_250)] to-[oklch(0.68_0.25_300)] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
           >
-            Let's Talk
-          </Link>
+            Let&apos;s Talk
+          </button>
+
+          <EnquiryDialog
+            open={enquiryOpen}
+            onClose={() => setEnquiryOpen(false)}
+            title="Let's Talk"
+            subtitle="Tell me about your project. Let's make it happen."
+            enquiryLabel="General Enquiry"
+            defaultSubject=""
+            defaultMessage=""
+            whatsappNumber={WHATSAPP_NUMBER}
+            email={CONTACT_EMAIL}
+            recipientName="Naveen"
+          />
 
           {/* Mobile menu button */}
           <button

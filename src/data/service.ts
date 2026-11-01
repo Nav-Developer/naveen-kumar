@@ -14,50 +14,58 @@ export type CreatorItem = {
 };
 
 export const services = {
-  eyebrow: "Services",
+  eyebrow: "Current Services",
   heading: "What I can build for you (with AI Assist)",
   subheading: "Premium engineering, freelance-friendly pricing.",
   items: [
     {
-      id: "web",
+      id: "digital-invitation",
+      title: "Digital Invitation",
+      description:
+        "Surprise your loved ones with a beautiful digital invitation shared directly through a browser.",
+      price: "$4+",
+      icon: "web",
+    },
+    {
+      id: "web-Development",
       title: "Web Development",
       description: "Marketing sites and apps built for speed.",
-      price: "$1+",
+      price: "$5+",
       icon: "web",
     },
     {
       id: "video",
       title: "Video Editing",
       description: "Video to boost the commercial.",
-      price: "$1+",
+      price: "$3+",
       icon: "video",
     },
     {
       id: "fullstack",
       title: "Full Stack Development",
       description: "End-to-end MERN / NestJS products.",
-      price: "$1+",
+      price: "$10+",
       icon: "fullstack",
     },
     {
       id: "react",
       title: "React Development",
       description: "Component libraries, dashboards, SPAs.",
-      price: "$1+",
+      price: "$5+",
       icon: "react",
     },
     {
       id: "api",
       title: "API Development",
       description: "REST APIs with auth and rate-limits.",
-      price: "$1+",
+      price: "$5+",
       icon: "api",
     },
     {
       id: "ui",
       title: "UI Development",
       description: "Pixel-perfect Figma → React conversions.",
-      price: "$1+",
+      price: "$5+",
       icon: "ui",
     },
     {
@@ -71,7 +79,7 @@ export const services = {
       id: "landing",
       title: "Landing Pages",
       description: "High-conversion launches in days.",
-      price: "$1+",
+      price: "$4+",
       icon: "landing",
     },
   ] as ServiceItem[],
