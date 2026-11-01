@@ -1,18 +1,24 @@
 import logo from "./Images/logo.jpg";
-import waffle from "./Images/waffle.png";
-import waffle_out from "./Images/waffle_out.png";
 import founders from "./Images/founders.png";
 import first_store from "./Images/firstStore.png";
 import me from "./Images/me.png";
+import wedding from "./Images/weeding-invite.png";
+import hot_chicks from "./Images/hot-chicks.png";
+import broffles from "./Images/broffle.png";
+import portfolio from "./Images/portfolio.png";
+import murugan from "./Images/sri-murugan-cafe.png";
 
 const assets = {
   images: {
     logo: logo,
-    waffle: waffle,
-    waffle_out: waffle_out,
     founders: founders,
     first_store: first_store,
     me: me,
+    wedding: wedding,
+    hot_chicks: hot_chicks,
+    broffles: broffles,
+    portfolio: portfolio,
+    murugan: murugan,
   },
 };
 

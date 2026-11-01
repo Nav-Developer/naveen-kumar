@@ -18,7 +18,7 @@ const links: NavLink[] = [
   { label: "About", href: "/#about", section: "about" },
   { label: "Skills", href: "/#skills", section: "skills" },
   { label: "Experience", href: "/#experience", section: "experience" },
-  { label: "Projects", href: "/projects" },
+  { label: "Projects", href: "/#projects", section: "projects" },
   { label: "Services", href: "/#services", section: "services" },
   // { label: "Contact", href: "/contact" },
 ];
