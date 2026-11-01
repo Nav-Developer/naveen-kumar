@@ -5,35 +5,42 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 
-const links = [
-  { href: "/about", label: "About" },
-  { href: "/skills", label: "Skills" },
-  { href: "/experience", label: "Experience" },
-  { href: "/projects", label: "Projects" },
-  { href: "/services", label: "Services" },
-  { href: "/contact", label: "Contact" },
+type NavLink = {
+  label: string;
+  href: string;
+  /** If set, this link scrolls to <section id="..."> on the home page */
+  section?: string;
+};
+
+const links: NavLink[] = [
+  { label: "About", href: "/#about", section: "about" },
+  { label: "Skills", href: "/#skills", section: "skills" },
+  { label: "Experience", href: "/#experience", section: "experience" },
+  { label: "Projects", href: "/projects" },
+  { label: "Services", href: "/#services", section: "services" },
+  { label: "Contact", href: "/contact" },
 ];
+
+const sectionIds = links.flatMap((l) => (l.section ? [l.section] : []));
 
 export function Nav() {
   const pathname = usePathname();
+  const isHome = pathname === "/";
 
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
+      // back at the hero → nothing highlighted
+      if (window.scrollY < 120) setActiveSection("");
     };
 
     onScroll();
-
-    window.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Close the mobile menu whenever the route changes.
@@ -41,8 +48,59 @@ export function Nav() {
     setOpen(false);
   }, [pathname]);
 
-  // Highlight the active route.
-  const isActive = (href: string) => pathname === href;
+  // Scroll-spy: highlight the section currently crossing the middle of the screen.
+  useEffect(() => {
+    if (!isHome) {
+      setActiveSection("");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && window.scrollY >= 120) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 },
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [isHome]);
+
+  const isActive = (link: NavLink) =>
+    link.section
+      ? isHome && activeSection === link.section
+      : pathname === link.href;
+
+  // On the home page, section links scroll smoothly instead of navigating.
+  const handleClick = (e: React.MouseEvent, link: NavLink) => {
+    setOpen(false);
+    if (!isHome || !link.section) return; // normal route navigation
+
+    const el = document.getElementById(link.section);
+    if (!el) return;
+
+    e.preventDefault();
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", `#${link.section}`);
+    setActiveSection(link.section);
+  };
+
+  const handleLogo = (e: React.MouseEvent) => {
+    setOpen(false);
+    if (!isHome) return;
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.replaceState(null, "", "/");
+    setActiveSection("");
+  };
 
   return (
     <motion.header
@@ -62,6 +120,7 @@ export function Nav() {
         {/* Logo */}
         <Link
           href="/"
+          onClick={handleLogo}
           aria-label="Naveen home"
           className="flex items-center gap-2 text-lg font-bold text-white"
         >
@@ -73,24 +132,21 @@ export function Nav() {
         {/* Desktop navigation */}
         <ul className="hidden items-center gap-1 text-sm md:flex">
           {links.map((link) => {
-            const active = isActive(link.href);
+            const active = isActive(link);
 
             return (
-              <li key={link.href} className="relative">
+              <li key={link.label} className="relative">
                 {active && (
                   <motion.span
                     layoutId="nav-pill"
                     className="absolute inset-0 rounded-lg bg-white/10"
-                    transition={{
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 32,
-                    }}
+                    transition={{ type: "spring", stiffness: 400, damping: 32 }}
                   />
                 )}
 
                 <Link
                   href={link.href}
+                  onClick={(e) => handleClick(e, link)}
                   aria-current={active ? "page" : undefined}
                   className={`relative block rounded-lg px-3 py-2 transition-colors hover:text-white ${
                     active ? "text-white" : "text-white/60"
@@ -126,13 +182,11 @@ export function Nav() {
                 open ? "translate-y-1.5 rotate-45" : ""
               }`}
             />
-
             <span
               className={`h-0.5 w-4 bg-white transition-opacity ${
                 open ? "opacity-0" : ""
               }`}
             />
-
             <span
               className={`h-0.5 w-4 bg-white transition-transform ${
                 open ? "-translate-y-1.5 -rotate-45" : ""
@@ -154,14 +208,14 @@ export function Nav() {
             className="glass-strong mt-2 flex flex-col rounded-2xl p-2 md:hidden"
           >
             {links.map((link) => {
-              const active = isActive(link.href);
+              const active = isActive(link);
 
               return (
-                <li key={link.href}>
+                <li key={link.label}>
                   <Link
                     href={link.href}
                     aria-current={active ? "page" : undefined}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => handleClick(e, link)}
                     className={`block rounded-xl px-4 py-3 transition-colors hover:bg-white/10 hover:text-white ${
                       active ? "bg-white/10 text-white" : "text-white/80"
                     }`}
