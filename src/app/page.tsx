@@ -10,13 +10,22 @@ export default function Home() {
   return (
     <>
       <HeroMotion />
-      {/* <section id="about"> */}
-      <AboutPage />
-      <SkillsPage />
-      <ExperiencePage />
-      <ServicesPage />
 
-      {/* </section> */}
+      <section id="about">
+        <AboutPage />
+      </section>
+
+      <section id="skills">
+        <SkillsPage />
+      </section>
+
+      <section id="experience">
+        <ExperiencePage />
+      </section>
+
+      <section id="services">
+        <ServicesPage />
+      </section>
     </>
   );
 }
