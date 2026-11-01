@@ -10,6 +10,8 @@ import {
   useTransform,
 } from "framer-motion";
 import assets from "@/assets";
+import EnquiryDialog from "../layout/EnquiryDialog";
+import { CONTACT_EMAIL, WHATSAPP_NUMBER } from "@/data/constant";
 
 /* ---------------- EDIT THESE ---------------- */
 const FULL_NAME = "Naveen Kumar";
@@ -164,6 +166,8 @@ export default function HeroMotion() {
     my.set(y / r.height - 0.5);
   };
 
+  const [enquiryOpen, setEnquiryOpen] = useState(false);
+
   return (
     <section
       ref={ref}
@@ -282,12 +286,24 @@ export default function HeroMotion() {
               View Projects
               <span className="transition group-hover:translate-x-1">→</span>
             </a>
-            <a
-              href="#contact"
+            <button
+              type="button"
+              onClick={() => setEnquiryOpen(true)}
               className="glass inline-flex items-center justify-center gap-2 rounded-2xl px-4 py-3.5 text-base font-semibold text-white transition hover:-translate-y-1 hover:bg-white/10 sm:px-9 md:py-4 md:text-lg"
             >
               Contact Me
-            </a>
+            </button>
+            <EnquiryDialog
+              open={enquiryOpen}
+              onClose={() => setEnquiryOpen(false)}
+              title="Let's Talk"
+              enquiryLabel="General Enquiry"
+              defaultSubject=""
+              defaultMessage=""
+              whatsappNumber={WHATSAPP_NUMBER}
+              email={CONTACT_EMAIL}
+              recipientName="Naveen"
+            />
           </motion.div>
 
           <motion.div
