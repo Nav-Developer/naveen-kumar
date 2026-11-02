@@ -42,6 +42,17 @@ export const projects: ProjectsData = {
       live: "https://pandi-wedding-invite.vercel.app",
     },
     {
+      id: "b8c-dance",
+      title: "B8C Dance",
+      desc: "Dance studio website for a client with class schedule, instructor profiles and booking system.",
+      cat: "Client",
+      status: "In Progress",
+      tags: ["Next.js", "TypeScript", "Tailwind"],
+      image: assets.images.b8c,
+      github: "https://github.com/Nav-Developer/b8c-dance",
+      live: "https://b8c-dance.vercel.app/",
+    },
+    {
       id: "hot-chicks",
       title: "The Hot Chicks",
       desc: "Pop-art restaurant website for a client with animated hero, story scroll and bold brand-color theming.",
@@ -74,6 +85,7 @@ export const projects: ProjectsData = {
       github: "https://github.com/Nav-Developer/sri-murugan-cafe",
       live: "https://sri-murugan-cafe-kappa.vercel.app",
     },
+
     {
       id: "demo-portfolio",
       title: "Demo Portfolio",

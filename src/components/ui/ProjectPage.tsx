@@ -23,6 +23,7 @@ const GithubIcon = ({ className }: { className?: string }) => (
 
 export function ProjectPage() {
   const [active, setActive] = useState<Cat>("All");
+
   const filtered =
     active === "All"
       ? projects.items
@@ -38,6 +39,7 @@ export function ProjectPage() {
             subheading={projects.subtitle}
           />
 
+          {/* Category Filters */}
           <Reveal>
             <div className="flex flex-wrap gap-2 justify-center mb-12">
               {projects.cats.map((c) => (
@@ -67,6 +69,7 @@ export function ProjectPage() {
             </div>
           </Reveal>
 
+          {/* Projects Grid */}
           <motion.div
             layout
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -82,14 +85,17 @@ export function ProjectPage() {
                   whileHover={{ y: -8 }}
                   className="group relative rounded-3xl overflow-hidden border border-white/10 bg-white/[0.04] backdrop-blur-xl"
                 >
+                  {/* Project Image */}
                   <div className="aspect-[4/3] relative overflow-hidden">
                     <img
                       src={p.image.src}
                       alt={p.title}
                       className="w-full h-full object-cover"
                     />
+
                     <div className="absolute inset-0 bg-black/20 group-hover:bg-black/50 transition" />
 
+                    {/* Project Status */}
                     <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-black/40 backdrop-blur px-2.5 py-1 text-[10px] uppercase tracking-widest text-white">
                       <span
                         className={`h-1.5 w-1.5 rounded-full ${
@@ -101,36 +107,54 @@ export function ProjectPage() {
                       {p.status}
                     </span>
 
-                    <div className="absolute inset-x-0 bottom-0 p-4 flex gap-2 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    {/* Action Buttons */}
+                    <div
+                      className="
+                        absolute inset-x-0 bottom-0 p-4
+                        flex gap-2
+                        translate-y-0 opacity-100
+                        md:translate-y-full md:opacity-0
+                        md:group-hover:translate-y-0
+                        md:group-hover:opacity-100
+                        transition-all duration-300
+                      "
+                    >
                       <a
                         href={p.live}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 rounded-xl py-2 text-sm font-medium text-white inline-flex items-center justify-center gap-1.5 border border-white/15 bg-black/50 backdrop-blur"
+                        className="flex-1 rounded-xl py-2.5 text-sm font-medium text-white inline-flex items-center justify-center gap-1.5 border border-white/15 bg-black/60 backdrop-blur-xl hover:bg-white/20 active:scale-95 transition"
                       >
-                        <ExternalLink className="h-3.5 w-3.5" /> Live
+                        <ExternalLink className="h-3.5 w-3.5" />
+                        Live
                       </a>
+
                       <a
                         href={p.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 rounded-xl py-2 text-sm font-medium text-white inline-flex items-center justify-center gap-1.5 border border-white/15 bg-black/50 backdrop-blur"
+                        className="flex-1 rounded-xl py-2.5 text-sm font-medium text-white inline-flex items-center justify-center gap-1.5 border border-white/15 bg-black/60 backdrop-blur-xl hover:bg-white/20 active:scale-95 transition"
                       >
-                        <GithubIcon className="h-3.5 w-3.5" /> Code
+                        <GithubIcon className="h-3.5 w-3.5" />
+                        Code
                       </a>
                     </div>
                   </div>
 
+                  {/* Project Details */}
                   <div className="p-6">
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="text-lg font-bold text-white">
                         {p.title}
                       </h3>
+
                       <span className="text-[10px] uppercase tracking-widest text-white/60 rounded-full border border-white/10 bg-white/5 px-2 py-0.5">
                         {p.cat}
                       </span>
                     </div>
+
                     <p className="mt-2 text-sm text-white/60">{p.desc}</p>
+
                     <div className="mt-4 flex flex-wrap gap-1.5">
                       {p.tags.map((t) => (
                         <span

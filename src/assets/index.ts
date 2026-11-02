@@ -7,6 +7,7 @@ import hot_chicks from "./Images/hot-chicks.png";
 import broffles from "./Images/broffle.png";
 import portfolio from "./Images/portfolio.png";
 import murugan from "./Images/sri-murugan-cafe.png";
+import b8c from "./Images/b8c.png";
 
 const assets = {
   images: {
@@ -19,6 +20,7 @@ const assets = {
     broffles: broffles,
     portfolio: portfolio,
     murugan: murugan,
+    b8c: b8c,
   },
 };
 
