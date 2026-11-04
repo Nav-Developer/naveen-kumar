@@ -53,6 +53,17 @@ export const projects: ProjectsData = {
       live: "https://b8c-dance.vercel.app/",
     },
     {
+      id: "trainer-portfolio",
+      title: "Trainer Portfolio",
+      desc: "Personal Trainer Portfolio.",
+      cat: "Personal",
+      status: "Live",
+      tags: ["Next", "TypeScript", "Tailwind"],
+      image: assets.images.raghu,
+      github: "https://github.com/Nav-Developer/raghu-rc",
+      live: "https://raghu-rc-w2u1.vercel.app/",
+    },
+    {
       id: "hot-chicks",
       title: "The Hot Chicks",
       desc: "Pop-art restaurant website for a client with animated hero, story scroll and bold brand-color theming.",

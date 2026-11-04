@@ -8,6 +8,7 @@ import broffles from "./Images/broffle.png";
 import portfolio from "./Images/portfolio.png";
 import murugan from "./Images/sri-murugan-cafe.png";
 import b8c from "./Images/b8c.png";
+import raghu from "./Images/raghu.png";
 
 const assets = {
   images: {
@@ -21,6 +22,7 @@ const assets = {
     portfolio: portfolio,
     murugan: murugan,
     b8c: b8c,
+    raghu: raghu,
   },
 };
 
