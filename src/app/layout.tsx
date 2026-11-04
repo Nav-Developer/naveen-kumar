@@ -14,8 +14,11 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Naveen Kumar",
-  description: "Where every dish is a performance.",
+  metadataBase: new URL("https://naveenkumar.site"),
+  title: "Naveen Kumar | Freelance Full Stack Developer in Coimbatore, India",
+  description:
+    "Freelance full stack developer in Coimbatore. React, NestJS, MongoDB, landing pages, portfolio websites, digital invitations and video editing.",
+  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({
