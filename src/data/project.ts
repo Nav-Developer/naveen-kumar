@@ -53,6 +53,17 @@ export const projects: ProjectsData = {
       live: "https://b8c-dance.vercel.app/",
     },
     {
+      id: "influencer-portfolio",
+      title: "Influencer Portfolio",
+      desc: "Influencer Portfolio.",
+      cat: "Personal",
+      status: "Live",
+      tags: ["Next", "TypeScript", "Tailwind"],
+      image: assets.images.santhosh,
+      github: "https://github.com/Nav-Developer/santhosh-prem",
+      live: "https://santhosh-prem-txg4.vercel.app/",
+    },
+    {
       id: "trainer-portfolio",
       title: "Trainer Portfolio",
       desc: "Personal Trainer Portfolio.",
