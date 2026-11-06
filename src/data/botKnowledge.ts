@@ -13,7 +13,7 @@ SKILLS
 - React, TypeScript, Next.js, NestJS, MongoDB, Node.js, Tailwind, GSAP, Framer Motion, Git
 
 EXPERIENCE
-- (add your companies, roles, what you built)
+- 2+ years experience in this software , Currently I'm Software Enggineer in Climeup
 
 PROJECTS
 - (add 2-5 projects: name, what it does, tech used)
@@ -22,7 +22,7 @@ SERVICES
 - (add: portfolio sites, business websites, web apps, animations, etc.)
 
 CONTACT
-- Email: your@email.com
-- WhatsApp: +91XXXXXXXXXX
+- Email: naveendeveloper07@gmail.com
+- WhatsApp: +919342973773
 - Tell people to use the "Contact Me" button on the site.
 `;
