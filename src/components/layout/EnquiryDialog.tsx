@@ -108,7 +108,6 @@ export default function EnquiryDialog({
         "noopener,noreferrer",
       );
     } else {
-      // Plain text for email (no WhatsApp-style *bold*)
       const body = [
         `Hi ${recipientName},`,
         ``,
@@ -119,7 +118,7 @@ export default function EnquiryDialog({
         `Looking forward to discussing this project with you!`,
       ].join("\n");
 
-      window.location.href = `mailto:${email}?subject=${encodeURIComponent(
+      window.location.href = `mailto:${email}?subject=[NAVEEN-PORTFOLIO] : ${encodeURIComponent(
         subject.trim(),
       )}&body=${encodeURIComponent(body)}`;
     }

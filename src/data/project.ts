@@ -96,17 +96,17 @@ export const projects: ProjectsData = {
       github: "https://github.com/Nav-Developer/broffles-the-waffle-",
       live: "https://broffles-the-waffle.vercel.app",
     },
-    {
-      id: "sri-murugan-cafe",
-      title: "Sri Murugan Cafe",
-      desc: "Cafe website for a client with video background, Instagram reels carousel and responsive layout.",
-      cat: "Client",
-      status: "In Progress",
-      tags: ["Next.js", "Swiper", "Tailwind"],
-      image: assets.images.murugan,
-      github: "https://github.com/Nav-Developer/sri-murugan-cafe",
-      live: "https://sri-murugan-cafe-kappa.vercel.app",
-    },
+    // {
+    //   id: "sri-murugan-cafe",
+    //   title: "Sri Murugan Cafe",
+    //   desc: "Cafe website for a client with video background, Instagram reels carousel and responsive layout.",
+    //   cat: "Client",
+    //   status: "In Progress",
+    //   tags: ["Next.js", "Swiper", "Tailwind"],
+    //   image: assets.images.murugan,
+    //   github: "https://github.com/Nav-Developer/sri-murugan-cafe",
+    //   live: "https://sri-murugan-cafe-kappa.vercel.app",
+    // },
 
     {
       id: "demo-portfolio",
