@@ -20,6 +20,8 @@ const links: NavLink[] = [
   { label: "Experience", href: "/#experience", section: "experience" },
   { label: "Projects", href: "/#projects", section: "projects" },
   { label: "Services", href: "/#services", section: "services" },
+  { label: "Blogs", href: "/#blogs", section: "blogs" },
+
   // { label: "Contact", href: "/contact" },
 ];
 

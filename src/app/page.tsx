@@ -1,6 +1,7 @@
 import Chatbot from "@/components/chatbot/ChatBot";
 import HeroMotion from "@/components/sections/HeroMotion";
 import AboutPage from "@/components/ui/AboutPage";
+import { BlogsSection } from "@/components/ui/BlogsSection";
 import ExperiencePage from "@/components/ui/ExperiencePage";
 import { ProjectPage } from "@/components/ui/ProjectPage";
 import ServicesPage from "@/components/ui/ServicesPage";
@@ -31,6 +32,10 @@ export default function Home() {
 
       <section id="services">
         <ServicesPage />
+      </section>
+
+      <section id="blogs">
+        <BlogsSection />
       </section>
 
       <Chatbot />
