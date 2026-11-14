@@ -59,7 +59,7 @@ export const projects: ProjectsData = {
       cat: "Client",
       status: "In Progress",
       tags: ["Next.js", "MUI", "Tailwind", "GSAP", "Sanity"],
-      image: assets.clients.sri_devi_vilas_logo,
+      image: assets.images.SDVMK,
       github: "https://github.com/Nav-Developer/the-hot-chicks",
       live: "https://sri-devi-vilas-mittai-kadai-xnpg.vercel.app/",
     },
