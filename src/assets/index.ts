@@ -12,6 +12,7 @@ import raghu from "./Images/raghu.png";
 import santhosh from "./Images/santhosh.png";
 import blog1 from "./Images/blog1.png";
 import b8c_logo from "./Images/b8c-logo.png";
+import sri_devi_vilas_logo from "./Images/sri-devi-vilas-logo.png";
 
 const assets = {
   images: {
@@ -30,7 +31,8 @@ const assets = {
     blog1: blog1,
   },
   clients: {
-    b8c_logo: b8c_logo,
+    b8c_logo,
+    sri_devi_vilas_logo,
   },
 };
 

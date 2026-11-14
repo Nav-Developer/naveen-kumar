@@ -33,5 +33,11 @@ export const clients: {
       logo: assets.clients.b8c_logo,
       url: "https://b8cdancecompany.in",
     },
+    {
+      id: "c2",
+      name: "Sri devi vilas mittai kadai",
+      logo: assets.clients.sri_devi_vilas_logo,
+      url: "https://sri-devi-vilas-mittai-kadai-xnpg.vercel.app/",
+    },
   ],
 };
