@@ -129,7 +129,7 @@ export function ProjectPage() {
                         Live
                       </a>
 
-                      <a
+                      {/* <a
                         href={p.github}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -137,7 +137,7 @@ export function ProjectPage() {
                       >
                         <GithubIcon className="h-3.5 w-3.5" />
                         Code
-                      </a>
+                      </a> */}
                     </div>
                   </div>
 
