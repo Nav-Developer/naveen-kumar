@@ -11,6 +11,7 @@ import b8c from "./Images/b8c.png";
 import raghu from "./Images/raghu.png";
 import santhosh from "./Images/santhosh.png";
 import blog1 from "./Images/blog1.png";
+import b8c_logo from "./Images/b8c-logo.png";
 
 const assets = {
   images: {
@@ -27,6 +28,9 @@ const assets = {
     raghu: raghu,
     santhosh: santhosh,
     blog1: blog1,
+  },
+  clients: {
+    b8c_logo: b8c_logo,
   },
 };
 
